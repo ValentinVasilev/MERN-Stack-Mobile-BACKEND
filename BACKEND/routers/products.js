@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
 
 // Get Only one Product
 router.get("/:id", async (req, res) => {
-  const product = await Product.findById(req.params.id).select("name");
+  const product = await Product.findById(req.params.id).populate("category"); // Populate will give us the information for the connected document
 
   if (!product) {
     res.status(500).json({ success: false });
