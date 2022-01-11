@@ -8,8 +8,6 @@ require("dotenv/config");
 
 const api = process.env.API_URL;
 
-const productsRouter = require("./routers/products");
-
 app.use(cors());
 app.options("*", cors());
 
@@ -17,8 +15,12 @@ app.options("*", cors());
 app.use(express.json()); // Here we parse the body from the request.
 app.use(morgan("tiny"));
 
-// Routers
+// Routes
+const productsRouter = require("./routers/products");
+const categoriesRouter = require("./routers/categories");
+
 app.use(`${api}/products`, productsRouter);
+app.use(`${api}/categories`, categoriesRouter);
 
 // Make connection to db before starting the server.
 mongoose
