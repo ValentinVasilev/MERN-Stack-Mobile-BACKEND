@@ -123,4 +123,17 @@ router.delete("/:id", async (req, res) => {
       return res.status(400).json({ success: false, error: err });
     });
 });
+
+router.get("/get/count", async (req, res) => {
+  const productCount = await Product.countDocuments();
+
+  if (!productCount) {
+    res.status(500).json({ success: false });
+  }
+
+  res.send({
+    productCount: productCount,
+  });
+});
+
 module.exports = router;
