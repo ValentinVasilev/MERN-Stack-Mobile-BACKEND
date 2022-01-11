@@ -7,7 +7,13 @@ const mongoose = require("mongoose");
 // Get List of All Products
 router.get("/", async (req, res) => {
   // const productList = await Product.find().select("name image -_id"); // With Select method we can tell the exact info we want to get. | -_id | means we dont want Id of the product to be returned. with '-' we exclude.
-  const productList = await Product.find();
+
+  let filter = {};
+  if (req.query.categories) {
+    filter = { category: req.query.categories.split(",") };
+  }
+
+  const productList = await Product.find(filter).populate("category");
   res.send(productList);
 });
 
