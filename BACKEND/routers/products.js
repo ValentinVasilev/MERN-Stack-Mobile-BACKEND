@@ -3,11 +3,32 @@ const { Category } = require("../models/category");
 const router = express.Router();
 const { Product } = require("../models/product");
 
+// Get List of All Products
 router.get("/", async (req, res) => {
-  const productList = await Product.find();
+  const productList = await Product.find().select("name image -_id"); // With Select method we can tell the exact info we want to get. | -_id | means we dont want Id of the product to be returned. with '-' we exclude.
   res.send(productList);
 });
 
+// Get Only one Product
+router.get("/:id", async (req, res) => {
+  const product = await Product.findById(req.params.id).select("name");
+
+  if (!product) {
+    res.status(500).json({ success: false });
+  }
+  res.send(product);
+});
+
+// router.get("/:id", async (req, res) => {
+//   const product = await Product.findById(req.params.id);
+
+//   if (!product) {
+//     res.status(500).json({ success: false });
+//   }
+//   res.send(product);
+// });
+
+// Create a Product
 router.post("/", async (req, res) => {
   // Check if the category exist
   const category = await Category.findById(req.body.category);
