@@ -24,10 +24,12 @@ app.use(errorHandler);
 const productsRouter = require("./routers/products");
 const categoriesRouter = require("./routers/categories");
 const usersRouter = require("./routers/users");
+const ordersRouter = require("./routers/orders");
 
 app.use(`${api}/products`, productsRouter);
 app.use(`${api}/categories`, categoriesRouter);
 app.use(`${api}/users`, usersRouter);
+app.use(`${api}/orders`, ordersRouter);
 
 // Make connection to db before starting the server.
 mongoose
