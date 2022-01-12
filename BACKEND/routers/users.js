@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const { User } = require("../models/user");
 
 router.get("/", async (req, res) => {
@@ -41,6 +42,30 @@ router.post("/", async (req, res) => {
     return res.status(500).send("User cannot be created!");
   }
   res.send(user);
+});
+
+router.post("/login", async (req, res) => {
+  // First check if the user exists by email
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return res.status(400).send("The User not found!");
+  }
+
+  const secret = process.env.SECRET;
+  // Since we have the user in our db, we check if the entered password from the user is the same as our hashed password in the db
+  if (user && bcrypt.compareSync(req.body.password, user.passwordHash)) {
+    const token = jwt.sign(
+      {
+        userId: user.id,
+      },
+      secret,
+      { expiresIn: "1d" }
+    );
+
+    res.status(200).send({ user: user.email, token: token });
+  } else {
+    res.status(400).send("Password is wrong!");
+  }
 });
 
 module.exports = router;
