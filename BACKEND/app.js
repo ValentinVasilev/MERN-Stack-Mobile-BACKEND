@@ -7,6 +7,7 @@ const cors = require("cors");
 require("dotenv/config");
 
 const api = process.env.API_URL;
+const authJWT = require("./helpers/jwt");
 
 app.use(cors());
 app.options("*", cors());
@@ -14,6 +15,7 @@ app.options("*", cors());
 // Those are middlewares
 app.use(express.json()); // Here we parse the body from the request.
 app.use(morgan("tiny"));
+app.use(authJWT());
 
 // Routes
 const productsRouter = require("./routers/products");
