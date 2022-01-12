@@ -6,6 +6,7 @@ function authJWT() {
   return expressJWT({
     secret,
     algorithms: ["HS256"],
+    isRevoked: isRevoked,
   }).unless({
     path: [
       // Here we tell the API what methods this URL can take
@@ -22,4 +23,11 @@ function authJWT() {
   });
 }
 
+// payload contains the data in the token
+async function isRevoked(req, payload, done) {
+  if (!payload.isAdmin) {
+    done(null, true);
+  }
+  done();
+}
 module.exports = authJWT;
