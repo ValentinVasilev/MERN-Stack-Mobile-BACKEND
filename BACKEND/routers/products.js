@@ -142,7 +142,7 @@ router.get("/get/count", async (req, res) => {
   });
 });
 
-// We find only the Featured products
+// We find only the Featured products, those are the products that has isFeatured: True
 router.get("/get/featured/:count", async (req, res) => {
   const count = req.params.count ? req.params.count : 0;
   const products = await Product.find({
