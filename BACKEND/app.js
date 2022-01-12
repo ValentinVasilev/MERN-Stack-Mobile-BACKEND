@@ -8,14 +8,17 @@ require("dotenv/config");
 
 const api = process.env.API_URL;
 const authJWT = require("./helpers/jwt");
+const errorHandler = require("./helpers/error-handler");
 
+// Enable CORS Policy
 app.use(cors());
 app.options("*", cors());
 
 // Those are middlewares
 app.use(express.json()); // Here we parse the body from the request.
 app.use(morgan("tiny"));
-app.use(authJWT());
+app.use(authJWT()); // Auth Token
+app.use(errorHandler);
 
 // Routes
 const productsRouter = require("./routers/products");
