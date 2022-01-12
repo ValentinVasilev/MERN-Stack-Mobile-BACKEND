@@ -4,7 +4,7 @@ const userSchema = mongoose.Schema({
   name: { type: String, require: true },
   email: { type: String, required: true },
   passwordHash: { type: String, require: true },
-  street: { type: String, default: false },
+  street: { type: String, default: "" },
   apartment: { type: String, default: "" },
   city: { type: String, default: "" },
   zip: { type: String, default: "" },
@@ -14,7 +14,7 @@ const userSchema = mongoose.Schema({
 });
 
 // from here to row 23, we use this to change the id. From _id to id(more user friendly)
-userSchema.virtuals("id").get(function () {
+userSchema.virtual("id").get(function () {
   return this._id.toHexString();
 });
 

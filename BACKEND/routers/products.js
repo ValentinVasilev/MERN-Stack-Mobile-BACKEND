@@ -1,8 +1,8 @@
 const express = require("express");
-const { Category } = require("../models/category");
 const router = express.Router();
-const { Product } = require("../models/product");
 const mongoose = require("mongoose");
+const { Product } = require("../models/product");
+const { Category } = require("../models/category");
 
 // Get List of All Products
 router.get("/", async (req, res) => {
