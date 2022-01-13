@@ -5,6 +5,12 @@ const { Product } = require("../models/product");
 const { Category } = require("../models/category");
 const multer = require("multer");
 
+const FILE_TYPE_MAP = {
+  "image/png": "png",
+  "image/jpeg": "jpeg",
+  "image/jpg": "jpg",
+};
+
 // Multer Configurations
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
