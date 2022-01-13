@@ -3,6 +3,7 @@ const router = express.Router();
 const { Order } = require("../models/order");
 const { OrderItem } = require("../models/order-item");
 
+// Get All Orders
 router.get(`/`, async (req, res) => {
   const orderList = await Order.find()
     .populate("user", "name")
@@ -14,6 +15,7 @@ router.get(`/`, async (req, res) => {
   res.send(orderList);
 });
 
+// Get Order by Id
 router.get(`/:id`, async (req, res) => {
   const order = await Order.findById(req.params.id)
     .populate("user", "name")
@@ -31,6 +33,7 @@ router.get(`/:id`, async (req, res) => {
   res.send(order);
 });
 
+// Create New Order
 router.post("/", async (req, res) => {
   const orderItemsIds = Promise.all(
     req.body.orderItems.map(async (orderItem) => {
@@ -78,4 +81,40 @@ router.post("/", async (req, res) => {
   res.send(order);
 });
 
+// Update Order Status by Id
+router.put("/:id", async (req, res) => {
+  const order = await Order.findByIdAndUpdate(
+    req.params.id,
+    {
+      status: req.body.status,
+    },
+    { new: true }
+  );
+
+  if (!order) return res.status(400).send("the order cannot be update!");
+
+  res.send(order);
+});
+
+// Delete Order by Id
+router.delete("/:id", (req, res) => {
+  Order.findByIdAndRemove(req.params.id)
+    .then(async (order) => {
+      if (order) {
+        await order.orderItems.map(async (orderItem) => {
+          await OrderItem.findByIdAndRemove(orderItem);
+        });
+        return res
+          .status(200)
+          .json({ success: true, message: "the order is deleted!" });
+      } else {
+        return res
+          .status(404)
+          .json({ success: false, message: "order not found!" });
+      }
+    })
+    .catch((err) => {
+      return res.status(500).json({ success: false, error: err });
+    });
+});
 module.exports = router;
