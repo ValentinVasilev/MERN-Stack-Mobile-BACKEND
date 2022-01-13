@@ -98,9 +98,11 @@ router.put("/:id", async (req, res) => {
 
 // Delete Order by Id
 router.delete("/:id", (req, res) => {
+  // # 1 - We Delete the order
   Order.findByIdAndRemove(req.params.id)
     .then(async (order) => {
       if (order) {
+        // # 2 - We loop over the deleted items, we get every order item and we deleted it
         await order.orderItems.map(async (orderItem) => {
           await OrderItem.findByIdAndRemove(orderItem);
         });
