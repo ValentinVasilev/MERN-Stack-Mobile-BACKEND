@@ -60,6 +60,9 @@ router.post("/", async (req, res) => {
     })
   );
 
+  // From the Above we get for example: ['50', '100']  => 2 products with different prices
+  // totalPrice reduce will calculate the prices in the array above and will return the Sum. In this case => 50+100 = 150
+  // So that way the titalPrice will be equal to the total price of all products in the Order
   const totalPrice = totalPrices.reduce((a, b) => a + b, 0);
 
   let order = new Order({
