@@ -18,6 +18,7 @@ app.options("*", cors());
 app.use(express.json()); // Here we parse the body from the request.
 app.use(morgan("tiny"));
 app.use(authJWT()); // Auth Token
+app.use("/public/uploads", express.static(__dirname + "/public/uploads")); // Define the static folder of our app
 app.use(errorHandler);
 
 // Routes
