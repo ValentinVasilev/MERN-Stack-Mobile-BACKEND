@@ -122,4 +122,31 @@ router.delete("/:id", (req, res) => {
       return res.status(500).json({ success: false, error: err });
     });
 });
+
+// The E-shop total sales
+router.get("/get/totalsales", async (req, res) => {
+  const totalSales = await Order.aggregate([
+    {
+      $group: { _id: null, totalsales: { $sum: "$totalPrice" } }, // the _id: null, because we cant return anythink without id, so we put id to null to not get any errors
+    },
+  ]);
+
+  if (!totalSales) {
+    return res.status(400).send("The Order sales cannot be generated!");
+  }
+
+  res.send({ totalSales: totalSales.pop().totalsales }); // Since the id is null and we dont need it, we get only th totalsales from the array that will be returned to us.
+});
+
+// Get the tital count of Orders
+router.get(`/get/count`, async (req, res) => {
+  const orderCount = await Order.countDocuments();
+
+  if (!orderCount) {
+    res.status(500).json({ success: false });
+  }
+  res.send({
+    orderCount: orderCount,
+  });
+});
 module.exports = router;
