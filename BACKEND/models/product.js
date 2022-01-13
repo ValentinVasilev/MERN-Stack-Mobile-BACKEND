@@ -7,7 +7,7 @@ const productSchema = mongoose.Schema({
   },
   description: {
     type: String,
-    requied: true,
+    required: true,
   },
   richDescription: {
     type: String,
@@ -37,9 +37,9 @@ const productSchema = mongoose.Schema({
   },
   countInStock: {
     type: Number,
-    requied: true,
+    required: true,
     min: 0,
-    max: 225,
+    max: 255,
   },
   rating: {
     type: Number,
